@@ -2,7 +2,6 @@ import React, { memo } from 'react'
 import { Table, Space, Button, Form } from 'antd'
 import _ from 'lodash'
 import CommonSelect from '@/common/CommonSelect'
-
 const CommonTable = ({
   columns,
   dataSource,
@@ -11,6 +10,8 @@ const CommonTable = ({
   actions,
   onFinish,
   initialValues,
+  rowKey,
+  className,
 }) => {
   const Components = {
     Select: CommonSelect,
@@ -20,6 +21,8 @@ const CommonTable = ({
     dataSource,
     loading,
     showHeader,
+    rowKey,
+    className,
   }
 
   return (

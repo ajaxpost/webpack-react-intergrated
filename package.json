@@ -13,12 +13,8 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "dev:build": "webpack",
-    "dev:start": "webpack serve"
+    "prd": "webpack --mode=production --config ./webpack.config.prd.js",
+    "dev": "webpack serve --config ./webpack.config.js"
   },
   "eslintConfig": {
     "extends": [
@@ -57,6 +53,7 @@
     "url-loader": "^4.1.1",
     "webpack": "^5.37.0",
     "webpack-cli": "^4.7.0",
-    "webpack-dev-server": "^3.11.2"
+    "webpack-dev-server": "^3.11.2",
+    "webpackbar": "^5.0.0-3"
   }
 }

@@ -32,7 +32,7 @@ const CreateAddClusters = () => {
       })}
       <Form.Item>
         <Button htmlType="submit" type="primary">
-          提交
+          部署
         </Button>
       </Form.Item>
     </Form>
