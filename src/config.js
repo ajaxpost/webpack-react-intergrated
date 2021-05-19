@@ -1,15 +1,34 @@
 export const tableConfig = [
   {
-    title: '序号',
-    dataIndex: 'serial',
-    key: 'serial',
-    width: '25%',
+    title: 'IP地址',
+    dataIndex: 'addr',
+    key: 'addr',
   },
   {
-    title: 'IP地址',
-    dataIndex: 'IP',
-    key: 'IP',
-    width: '25%',
+    title: '主机用户名',
+    dataIndex: 'username',
+    key: 'username',
+    align: 'center',
+  },
+  {
+    title: '主机密码',
+    dataIndex: 'password',
+    key: 'password',
+  },
+  {
+    title: '端口',
+    dataIndex: 'port',
+    key: 'port',
+  },
+  {
+    title: 'JDK路径',
+    dataIndex: 'jdkPath',
+    key: 'jdkPath',
+  },
+  {
+    title: '服务安装路径',
+    dataIndex: 'insPath',
+    key: 'insPath',
   },
   {
     title: '状态',
@@ -50,26 +69,48 @@ export const actions = [
   //     className: 'wh-Select',
   //   },
   // },
-  // {
-  //   id: '#4',
-  //   component: 'Select',
-  //   isFormItem: true,
-  //   name: 'xxx',
-  //   label: '',
-  //   rules: [],
-  //   props: [],
-  //   componentProps: {
-  //     options: [
-  //       { label: '启动', value: 'start' },
-  //       { label: '停止', value: 'stop' },
-  //       { label: '删除', value: 'del' },
-  //     ],
-  //     className: 'wh-Select-status',
-  //   },
-  // },
-  // {
-  //   id: 'submit',
-  //   title: '开始执行',
-  //   isFormItem: true,
-  // },
+  {
+    id: '#4',
+    component: 'Select',
+    isFormItem: true,
+    name: 'status',
+    label: '',
+    rules: [],
+    props: [],
+    componentProps: {
+      options: [
+        { label: '启动', value: 'start' },
+        { label: '停止', value: 'stop' },
+        { label: '重启', value: 'restart' },
+      ],
+      className: 'wh-Select-status',
+    },
+  },
+  {
+    id: 'submit',
+    title: '开始执行',
+    isFormItem: true,
+  },
+]
+
+export const initialValues = {
+  status: 'start',
+}
+
+export const operationRender = [
+  {
+    id: 'start',
+    title: '启动',
+    className: 'iconfont icon-qidong',
+  },
+  {
+    id: 'stop',
+    title: '停止',
+    className: 'iconfont icon-tingzhi',
+  },
+  {
+    id: 'del',
+    title: '删除',
+    className: 'iconfont icon-delete',
+  },
 ]

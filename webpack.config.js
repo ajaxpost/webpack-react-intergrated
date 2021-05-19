@@ -109,6 +109,15 @@ module.exports = {
     quiet: true,
     stats: 'errors-only',
     port,
+    proxy: {
+      // 一旦devServer服务器接受到 /api开头的请求，就会把请求转发到另一个服务器
+      '/cluster': {
+        target: 'http://119.3.177.131:8080/',
+        changeOrigin: true,
+        secure: false,
+        ws: false,
+      },
+    },
   },
   resolve: {
     alias: {

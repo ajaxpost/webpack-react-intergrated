@@ -1,11 +1,21 @@
-import React, { useState, useCallback } from 'react'
-import { tableConfig, actions } from './config'
+import React, { useState, useCallback, useEffect } from 'react'
+import { tableConfig, actions, initialValues, operationRender } from './config'
 import CommonTable from '@/common/CommonTable'
 import _ from 'lodash'
 import CommonModal from '@/common/CommonModal'
 import CreateAddClusters from '@/components/CreateAddClusters/CreateAddClusters'
 import CreateConfigNginx from '@/components/CreateConfigNginx/CreateConfigNginx'
-import { Button, Space, Tooltip } from 'antd'
+import { message, Space, Tooltip } from 'antd'
+import {
+  getAllNodeConfig,
+  getNodeStatus,
+  startNodeConfig,
+  stopNodeConfig,
+  delNodeConfig,
+  stopNginxServer,
+  startNginxServer,
+  restartNginxServer,
+} from '@/server/index.js'
 
 const Components = {
   CreateAddClusters,
@@ -16,6 +26,33 @@ const App = () => {
   const [modalVisible, setModalVisible] = useState(false)
   const [title, setTitle] = useState('添加集群节点')
   const [componentId, setComponentId] = useState('CreateAddClusters')
+  const [addText, setAddText] = useState('')
+  const [dataSource, setDataSource] = useState([])
+
+  useEffect(() => {
+    getAllNodeConfig().then((ret) => {
+      if (ret.code === 0) {
+        getNodeStatus().then((res) => {
+          setDataSource(
+            _.map(Object.keys(ret.data), (item, key) => {
+              const obj = ret.data[item]
+              return {
+                addr: obj.addr,
+                insPath: obj.insPath,
+                jdkPath: obj.jdkPath,
+                password: obj.password,
+                port: obj.port,
+                username: obj.username,
+                id: key,
+                status: res.data[obj.addr] || '运行中',
+              }
+            })
+          )
+        })
+      }
+    })
+  }, [])
+
   const handlerAddClusters = (title, componentId) => {
     setModalVisible(true)
     setTitle(title)
@@ -29,10 +66,13 @@ const App = () => {
 
   const handleCancel = useCallback(() => {
     setModalVisible(false)
+    setAddText(null)
   }, [])
   const AddCustomHeader = (text) => {
     setModalVisible(true)
+    setTitle('编辑集群节点')
     setComponentId('CreateAddClusters')
+    setAddText(text)
   }
   const nameColumns = (text) => {
     return (
@@ -47,15 +87,40 @@ const App = () => {
     addClusters: () => handlerAddClusters('添加集群节点', 'CreateAddClusters'),
     configNginx: () => handlerConfigNginx('Nginx配置', 'CreateConfigNginx'),
   }
-  const handlerStart = (record) => {
-    console.log(record)
+  const handlerStart = (name) => {
+    startNodeConfig({ name }).then((ret) => {
+      if (ret.code === 0) {
+        message.success('启动成功')
+      }
+    })
   }
-  const handlerStop = (record) => {
-    console.log(record)
+  const handlerStop = (name) => {
+    stopNodeConfig({ name }).then((ret) => {
+      if (ret.code === 0) {
+        message.success('启动成功')
+      }
+    })
   }
-  const handlerDelte = (record) => {
-    console.log(record)
+  const handlerDelte = (name) => {
+    delNodeConfig({ name }).then((ret) => {
+      if (ret.code === 0) {
+        message.success('启动成功')
+      }
+    })
   }
+
+  const operationOnClick = {
+    start: (name) => handlerStart(name),
+    stop: (name) => handlerStop(name),
+    del: (name) => handlerDelte(name),
+  }
+
+  const operation = _.map(operationRender, (item, key) => {
+    const obj = { ...item }
+    obj.onClick = operationOnClick[item.id]
+    return obj
+  })
+
   const tableProps = {
     columns: _.map(tableConfig, (item, key) => {
       const obj = { ...item }
@@ -64,19 +129,24 @@ const App = () => {
           obj.render = (text, record) => {
             return (
               <Space>
-                <Button onClick={() => handlerStart(record)}>启动</Button>
-                <Button onClick={() => handlerStop(record)}>停止</Button>
-                <Button onClick={() => handlerDelte(record)}>删除</Button>
+                {_.map(operation, (item, key) => {
+                  return (
+                    <div
+                      onClick={() => item.onClick(record.addr)}
+                      key={item.id}
+                    >
+                      <Tooltip title={item.title}>
+                        <div className={item.className}></div>
+                      </Tooltip>
+                    </div>
+                  )
+                })}
               </Space>
             )
           }
           break
-        case 'serial':
-          obj.render = (text, record, index) => {
-            return <span>{index}</span>
-          }
-          break
-        case 'IP':
+
+        case 'addr':
           obj.render = (text, record, index) => nameColumns(text)
           break
         default:
@@ -84,7 +154,7 @@ const App = () => {
       }
       return obj
     }),
-    dataSource: [{ id: 1, IP: 123 }],
+    dataSource,
     rowKey: 'id',
     loading: false,
     actions: _.map(actions, (item, key) => {
@@ -92,12 +162,39 @@ const App = () => {
         return { ...item }
       }
       const obj = { ...item }
-
       obj.onClick = actionsOnClick[item.id]
-
       return obj
     }),
     className: 'wh-table-button',
+    initialValues,
+    onFinish: (values) => {
+      console.log(values)
+      switch (values.status) {
+        case 'stop':
+          stopNginxServer().then((ret) => {
+            if (ret.code === 0) {
+              message.success(ret.message)
+            }
+          })
+          break
+        case 'start':
+          startNginxServer().then((ret) => {
+            if (ret.code === 0) {
+              message.success(ret.message)
+            }
+          })
+          break
+        case 'restart':
+          restartNginxServer().then((ret) => {
+            if (ret.code === 0) {
+              message.success(ret.message)
+            }
+          })
+          break
+        default:
+          break
+      }
+    },
   }
 
   return (
@@ -112,6 +209,7 @@ const App = () => {
         width="50%"
         modalCompProps={{
           onCancel: handleCancel,
+          addText,
         }}
       />
     </>

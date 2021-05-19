@@ -2,7 +2,7 @@ export const FormConfig = [
   {
     id: '#1-1',
     label: 'IP地址',
-    name: 'IP',
+    name: 'ip',
     component: 'Input',
     placeholder: '',
     notes: '',
@@ -12,6 +12,17 @@ export const FormConfig = [
   },
   {
     id: '#2-1',
+    label: '连接端口',
+    name: 'port',
+    component: 'InputNumber',
+    placeholder: '',
+    notes: '',
+    rules: [],
+    props: {},
+    componentProps: {},
+  },
+  {
+    id: '#3-1',
     label: '用户名',
     name: 'username',
     component: 'Input',
@@ -22,7 +33,7 @@ export const FormConfig = [
     componentProps: {},
   },
   {
-    id: '#3-1',
+    id: '#4-1',
     label: '主机密码',
     name: 'password',
     component: 'Input',
@@ -33,9 +44,9 @@ export const FormConfig = [
     componentProps: {},
   },
   {
-    id: '#4-1',
-    label: '配置文件',
-    name: 'pzwj',
+    id: '#5-1',
+    label: '配置文件路径',
+    name: 'profile',
     component: 'Input',
     placeholder: '',
     notes: '',
