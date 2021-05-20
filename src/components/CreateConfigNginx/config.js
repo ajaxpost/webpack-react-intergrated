@@ -59,3 +59,6 @@ export const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 8 },
 }
+export const initialValues = {
+  port: 22,
+}

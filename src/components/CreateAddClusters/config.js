@@ -34,7 +34,7 @@ export const FormConfig = [
   },
   {
     id: '#4-1',
-    label: '端口',
+    label: '端口号',
     name: 'port',
     component: 'InputNumber',
     placeholder: '',
@@ -70,4 +70,7 @@ export const FormConfig = [
 export const layout = {
   labelCol: { span: 4 },
   wrapperCol: { span: 8 },
+}
+export const initialValues = {
+  port: 22,
 }

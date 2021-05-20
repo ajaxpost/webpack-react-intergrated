@@ -28,6 +28,8 @@ const App = () => {
   const [componentId, setComponentId] = useState('CreateAddClusters')
   const [addText, setAddText] = useState('')
   const [dataSource, setDataSource] = useState([])
+  const [anew, setAnew] = useState({})
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     getAllNodeConfig().then((ret) => {
@@ -48,10 +50,28 @@ const App = () => {
               }
             })
           )
+          setLoading(false)
         })
       }
     })
-  }, [])
+  }, [anew])
+
+  useEffect(() => {
+    if (dataSource.length > 0) {
+      const timeOut = setTimeout(() => {
+        getNodeStatus().then((ret) => {
+          if (ret.code === 0) {
+            setDataSource(
+              _.map(dataSource, (item, key) => {
+                return { ...item, status: ret.data[item.addr] }
+              })
+            )
+          }
+        })
+      }, 20000)
+      return () => clearTimeout(timeOut)
+    }
+  }, [dataSource])
 
   const handlerAddClusters = (title, componentId) => {
     setModalVisible(true)
@@ -88,23 +108,28 @@ const App = () => {
     configNginx: () => handlerConfigNginx('Nginx配置', 'CreateConfigNginx'),
   }
   const handlerStart = (name) => {
+    setLoading(true)
     startNodeConfig({ name }).then((ret) => {
       if (ret.code === 0) {
-        message.success('启动成功')
+        setTimeout(() => {
+          setAnew({})
+        }, 500)
       }
     })
   }
   const handlerStop = (name) => {
+    setLoading(true)
     stopNodeConfig({ name }).then((ret) => {
       if (ret.code === 0) {
-        message.success('启动成功')
+        setAnew({})
       }
     })
   }
   const handlerDelte = (name) => {
+    setLoading(true)
     delNodeConfig({ name }).then((ret) => {
       if (ret.code === 0) {
-        message.success('启动成功')
+        setAnew({})
       }
     })
   }
@@ -149,6 +174,14 @@ const App = () => {
         case 'addr':
           obj.render = (text, record, index) => nameColumns(text)
           break
+        case 'status':
+          obj.render = (text, record, index) => {
+            if (text === '运行中') {
+              return <span style={{ color: 'green' }}>{text}</span>
+            }
+            return <span style={{ color: 'red' }}>{text}</span>
+          }
+          break
         default:
           break
       }
@@ -156,7 +189,7 @@ const App = () => {
     }),
     dataSource,
     rowKey: 'id',
-    loading: false,
+    loading,
     actions: _.map(actions, (item, key) => {
       if (!item.isButton) {
         return { ...item }
@@ -168,13 +201,14 @@ const App = () => {
     className: 'wh-table-button',
     initialValues,
     onFinish: (values) => {
-      console.log(values)
+      setLoading(true)
       switch (values.status) {
         case 'stop':
           stopNginxServer().then((ret) => {
             if (ret.code === 0) {
               message.success(ret.message)
             }
+            setLoading(false)
           })
           break
         case 'start':
@@ -182,6 +216,7 @@ const App = () => {
             if (ret.code === 0) {
               message.success(ret.message)
             }
+            setLoading(false)
           })
           break
         case 'restart':
@@ -189,6 +224,7 @@ const App = () => {
             if (ret.code === 0) {
               message.success(ret.message)
             }
+            setLoading(false)
           })
           break
         default:
@@ -210,6 +246,7 @@ const App = () => {
         modalCompProps={{
           onCancel: handleCancel,
           addText,
+          setAnew,
         }}
       />
     </>

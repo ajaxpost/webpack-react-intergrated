@@ -12,10 +12,9 @@ class CommonFetch {
       })
         .then((ret) => ret.json())
         .then((ret) => {
+          resolve(ret)
           if (ret.code !== 0) {
             message.error(ret.message || ret.error || '失败')
-          } else {
-            resolve(ret)
           }
         })
         .catch((error) => {
