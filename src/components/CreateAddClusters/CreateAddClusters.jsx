@@ -11,7 +11,7 @@ const Components = {
 }
 
 const CreateAddClusters = ({
-  componentProps: { addText, setAnew },
+  componentProps: { addText, setAnew, setAddr },
   onCancel,
 }) => {
   const [form] = Form.useForm()
@@ -31,10 +31,11 @@ const CreateAddClusters = ({
   }, [])
   const onFinish = (values) => {
     setLoading(true)
+    setAddr(values.addr)
     addNodeConfig(values).then((ret) => {
       if (ret.code === 0) {
         message.success(ret.message || '成功')
-        setAnew({})
+        setAnew([])
       }
       setLoading(false)
       onCancel()

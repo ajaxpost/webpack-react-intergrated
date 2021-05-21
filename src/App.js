@@ -5,7 +5,9 @@ import _ from 'lodash'
 import CommonModal from '@/common/CommonModal'
 import CreateAddClusters from '@/components/CreateAddClusters/CreateAddClusters'
 import CreateConfigNginx from '@/components/CreateConfigNginx/CreateConfigNginx'
-import { message, Space, Tooltip } from 'antd'
+import { message, Space, Tooltip, Modal } from 'antd'
+import { ExclamationCircleOutlined } from '@ant-design/icons'
+
 import {
   getAllNodeConfig,
   getNodeStatus,
@@ -30,6 +32,7 @@ const App = () => {
   const [dataSource, setDataSource] = useState([])
   const [anew, setAnew] = useState({})
   const [loading, setLoading] = useState(true)
+  const [addr, setAddr] = useState('')
 
   useEffect(() => {
     getAllNodeConfig().then((ret) => {
@@ -38,6 +41,18 @@ const App = () => {
           setDataSource(
             _.map(Object.keys(ret.data), (item, key) => {
               const obj = ret.data[item]
+              if (obj.addr === addr) {
+                return {
+                  addr: obj.addr,
+                  insPath: obj.insPath,
+                  jdkPath: obj.jdkPath,
+                  password: obj.password,
+                  port: obj.port,
+                  username: obj.username,
+                  id: key,
+                  status: _.isArray(anew) ? '运行中' : res.data[obj.addr],
+                }
+              }
               return {
                 addr: obj.addr,
                 insPath: obj.insPath,
@@ -46,7 +61,7 @@ const App = () => {
                 port: obj.port,
                 username: obj.username,
                 id: key,
-                status: res.data[obj.addr] || '运行中',
+                status: res.data[obj.addr],
               }
             })
           )
@@ -54,6 +69,7 @@ const App = () => {
         })
       }
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [anew])
 
   useEffect(() => {
@@ -110,27 +126,32 @@ const App = () => {
   const handlerStart = (name) => {
     setLoading(true)
     startNodeConfig({ name }).then((ret) => {
-      if (ret.code === 0) {
-        setTimeout(() => {
-          setAnew({})
-        }, 500)
-      }
+      setTimeout(() => {
+        setAnew({})
+      }, 1000)
     })
   }
   const handlerStop = (name) => {
     setLoading(true)
     stopNodeConfig({ name }).then((ret) => {
-      if (ret.code === 0) {
-        setAnew({})
-      }
+      setAnew({})
     })
   }
   const handlerDelte = (name) => {
-    setLoading(true)
-    delNodeConfig({ name }).then((ret) => {
-      if (ret.code === 0) {
-        setAnew({})
-      }
+    Modal.confirm({
+      title: '确定要删除吗!',
+      icon: <ExclamationCircleOutlined />,
+      okText: '删除',
+      cancelText: '取消',
+
+      onOk: (close) => {
+        setLoading(true)
+        delNodeConfig({ name }).then((ret) => {
+          setAnew({})
+        })
+
+        close()
+      },
     })
   }
 
@@ -247,6 +268,7 @@ const App = () => {
           onCancel: handleCancel,
           addText,
           setAnew,
+          setAddr,
         }}
       />
     </>
