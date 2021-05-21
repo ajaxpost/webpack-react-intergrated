@@ -12,6 +12,8 @@ const CommonTable = ({
   initialValues,
   rowKey,
   className,
+  rowSelection,
+  pagination,
 }) => {
   const Components = {
     Select: CommonSelect,
@@ -23,6 +25,8 @@ const CommonTable = ({
     showHeader,
     rowKey,
     className,
+    rowSelection,
+    pagination,
   }
 
   return (

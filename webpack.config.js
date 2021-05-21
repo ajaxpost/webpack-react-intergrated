@@ -2,7 +2,6 @@ const path = require('path')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 const ESLintPlugin = require('eslint-webpack-plugin')
-const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const webpack = require('webpack')
 const WebpackBar = require('webpackbar')
 const port = 8080
@@ -34,7 +33,7 @@ module.exports = {
         test: /\.(css|less)$/,
 
         use: [
-          MiniCssExtractPlugin.loader,
+          'style-loader',
           {
             loader: 'css-loader',
             options: {
@@ -82,9 +81,7 @@ module.exports = {
       inject: 'body',
       hash: true,
     }),
-    new MiniCssExtractPlugin({
-      filename: 'css/[name]_[chunkhash:6].css',
-    }),
+
     new CleanWebpackPlugin(),
     new ESLintPlugin(),
     new webpack.HotModuleReplacementPlugin(),

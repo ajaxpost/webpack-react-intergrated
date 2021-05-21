@@ -1,30 +1,35 @@
 export const tableConfig = [
   {
+    title: '序号',
+    dataIndex: 'id',
+    key: 'id',
+  },
+  {
     title: 'IP地址',
     dataIndex: 'addr',
     key: 'addr',
   },
-  {
-    title: '主机用户名',
-    dataIndex: 'username',
-    key: 'username',
-    align: 'center',
-  },
-  {
-    title: '主机密码',
-    dataIndex: 'password',
-    key: 'password',
-  },
-  {
-    title: '端口',
-    dataIndex: 'port',
-    key: 'port',
-  },
-  {
-    title: 'JDK路径',
-    dataIndex: 'jdkPath',
-    key: 'jdkPath',
-  },
+  // {
+  //   title: '主机用户名',
+  //   dataIndex: 'username',
+  //   key: 'username',
+  //   align: 'center',
+  // },
+  // {
+  //   title: '主机密码',
+  //   dataIndex: 'password',
+  //   key: 'password',
+  // },
+  // {
+  //   title: '端口',
+  //   dataIndex: 'port',
+  //   key: 'port',
+  // },
+  // {
+  //   title: 'JDK路径',
+  //   dataIndex: 'jdkPath',
+  //   key: 'jdkPath',
+  // },
   {
     title: '服务安装路径',
     dataIndex: 'insPath',
@@ -79,9 +84,9 @@ export const actions = [
     props: [],
     componentProps: {
       options: [
-        { label: '启动', value: 'start' },
-        { label: '停止', value: 'stop' },
-        { label: '重启', value: 'restart' },
+        { label: '启动(Nginx)', value: 'start' },
+        { label: '停止(Nginx)', value: 'stop' },
+        { label: '重启(Nginx)', value: 'restart' },
       ],
       className: 'wh-Select-status',
     },
@@ -101,16 +106,16 @@ export const operationRender = [
   {
     id: 'start',
     title: '启动',
-    className: 'iconfont icon-qidong',
+    className: 'iconfont icon-qidong wh-icon-qidong',
   },
   {
     id: 'stop',
     title: '停止',
-    className: 'iconfont icon-tingzhi',
+    className: 'iconfont icon-tingzhi wh-icon-tingzhi',
   },
   {
     id: 'del',
     title: '删除',
-    className: 'iconfont icon-delete',
+    className: 'iconfont icon-delete wh-icon-delete',
   },
 ]

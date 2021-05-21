@@ -69,12 +69,15 @@ const CreateAddClusters = ({
           )
         })}
       </Spin>
-
-      <Form.Item>
-        <Button htmlType="submit" type="primary" disabled={addText && true}>
-          部署
-        </Button>
-      </Form.Item>
+      {addText ? (
+        ''
+      ) : (
+        <Form.Item>
+          <Button htmlType="submit" type="primary">
+            部署
+          </Button>
+        </Form.Item>
+      )}
     </Form>
   )
 }

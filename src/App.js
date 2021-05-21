@@ -49,7 +49,7 @@ const App = () => {
                   password: obj.password,
                   port: obj.port,
                   username: obj.username,
-                  id: key,
+                  id: key + 1,
                   status: _.isArray(anew) ? '运行中' : res.data[obj.addr],
                 }
               }
@@ -60,7 +60,7 @@ const App = () => {
                 password: obj.password,
                 port: obj.port,
                 username: obj.username,
-                id: key,
+                id: key + 1,
                 status: res.data[obj.addr],
               }
             })
@@ -106,7 +106,7 @@ const App = () => {
   }, [])
   const AddCustomHeader = (text) => {
     setModalVisible(true)
-    setTitle('编辑集群节点')
+    setTitle('集群节点详细信息')
     setComponentId('CreateAddClusters')
     setAddText(text)
   }
@@ -220,6 +220,7 @@ const App = () => {
       return obj
     }),
     className: 'wh-table-button',
+    pagination: false,
     initialValues,
     onFinish: (values) => {
       setLoading(true)
@@ -255,7 +256,7 @@ const App = () => {
   }
 
   return (
-    <>
+    <div className="wh-app">
       <CommonTable {...tableProps} />
       <CommonModal
         visible={modalVisible}
@@ -271,7 +272,7 @@ const App = () => {
           setAddr,
         }}
       />
-    </>
+    </div>
   )
 }
 

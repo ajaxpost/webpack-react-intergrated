@@ -11,18 +11,45 @@ body {
   #wh {
     width: 100%;
     height: 100%;
-    .wh-Select {
-      margin-left: 100px;
-      width: 200px;
-    }
-    .wh-Select-status {
-      width: 100px;
-    }
-    .wh-table-button {
-      .click-column {
-        color: blue;
-        // 改变鼠标的光标(指针)形状
-        cursor: pointer;
+    .wh-app {
+      width: 700px;
+      height: 400px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      margin: auto;
+      .wh-table-button {
+        height: 300px;
+        overflow: auto;
+        .iconfont {
+          cursor: pointer;
+        }
+        .wh-icon-qidong {
+          color: green;
+        }
+        .wh-icon-tingzhi {
+          color: red;
+        }
+        .wh-icon-delete {
+          color: rgb(29, 26, 27);
+        }
+      }
+
+      .wh-Select {
+        margin-left: 100px;
+        width: 200px;
+      }
+      .wh-Select-status {
+        width: 100px;
+      }
+      .wh-table-button {
+        .click-column {
+          color: blue;
+          // 改变鼠标的光标(指针)形状
+          cursor: pointer;
+        }
       }
     }
   }
